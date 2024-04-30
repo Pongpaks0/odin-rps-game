@@ -1,5 +1,15 @@
 let humanScore = 0, computerScore = 0;
 
+const buttons = document.querySelectorAll("button");
+buttons.forEach((button) => {
+    button.addEventListener("click", (e) => {
+        playRound(e.target.id, getComputerChoice())
+    })
+})
+
+const results = document.querySelector("#results")
+const scores = document.querySelector("#scores")
+
 function getComputerChoice() {
     let value = Math.floor(Math.random() * 3);
     switch (value) {
@@ -18,53 +28,44 @@ function getHumanChoice() {
     return prompt("Choose rock, paper, or scissors").toLowerCase()
 }
 
-function win() {
-    console.log("You win!")
+function win(computerChoice) {
+    results.textContent = "The computer picked " + computerChoice + ", You win!"
     humanScore++
     logScore()
 }
 
-function lose() {
-    console.log("You lose!")
+function lose(computerChoice) {
+    results.textContent = "The computer picked " + computerChoice + ", You lose!"
     computerScore++
     logScore()
 }
 
-function draw() {
-    console.log("Draw!")
+function draw(computerChoice) {
+    results.textContent = "The computer picked " + computerChoice + ", Draw!"
     logScore()
 }
 
 function logScore() {
-    console.log("Human: " + humanScore + ", Computer: " + computerScore);
+    const text = "Human: " + humanScore + ", Computer: " + computerScore
+    scores.textContent = text;
 }
 
 function playRound(humanChoice, computerChoice) {
+    if (humanChoice == computerChoice) return draw(computerChoice);
     if (humanChoice === "rock") {
         switch (computerChoice) {
-            case "rock": return draw();
-            case "paper": return lose();
-            case "scissors": return win();
+            case "paper": return lose(computerChoice);
+            case "scissors": return win(computerChoice);
         }
     } else if (humanChoice === "paper") {
         switch (computerChoice) {
-            case "rock": return win();
-            case "paper": return draw();
-            case "scissors": return lose();
+            case "rock": return win(computerChoice);
+            case "scissors": return lose(computerChoice);
         }
     } else if (humanChoice === "scissors") {
         switch (computerChoice) {
-            case "rock": return lose();
-            case "paper": return win();
-            case "scissors": return draw();
+            case "rock": return lose(computerChoice);
+            case "paper": return win(computerChoice);
         }
     }
 }
-
-function playGame() {
-    for (i = 0; i < 5; i++) {
-        playRound(getHumanChoice(), getComputerChoice())
-    }
-}
-
-playGame(rock)
